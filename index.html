@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reconnexus - Hardware Recon Toolkit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+          :root {
+            --primary: #6366f1;
+            --secondary: #525e75;
+            --accent: #ec4899;
+            --background: #92ba92;
+            --text: #11150d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--background) 0%, #78938a 100%);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo-container img {
+            width: 320px;
+            height: auto;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        .search-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-box {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        #searchEngine {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+		
+        #searchEngine option {
+            background: var(--background);
+            color: var(--text);
+        }
+		
+        #searchEngine:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        #query {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        #query:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        input[type="submit"] {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(79, 70, 229, 0.25);
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+        }
+
+        .footer {
+            background: rgba(255, 255, 255, 0.05);
+            padding: .70rem;
+            text-align: center;
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .search-section {
+                padding: 1.5rem;
+            }
+            
+            .logo-container img {
+                width: 260px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="logo.png" alt="logo">
+        </div>
+        <div class="search-section">
+            <div class="search-header">
+                </div>
+            <form class="search-box" onsubmit="event.preventDefault(); search();">
+                <select id="searchEngine" aria-label="Select search engine">
+                    <option value="Wiki">Wiki</option>
+                    <option value="fccid">FCCID</option>
+                    <option value="Openwrt">Openwrt</option>
+                    <option value="datasheet">IC Analysis</option>
+                    <option value="CVE">CVE's</option>
+                    <option value="mac">MAC Address</option>
+                    <option value="Code">Code</option>
+                    <option value="exploit">Available Exploits</option>
+                    <option value="github">Git Dork</option>
+                    <option value="google">Google Dorks</option>
+                    <option value="defaultcreds">Default Creds</option>
+                    <option value="forums">Online Forums</option>
+                    <option value="shodan">Shodan</option>
+                    <option value="library">Third-party Components</option>
+                    <option value="reports">Previous Reports</option>
+                    <option value="firmware">Download Firmware</option>
+                </select>
+                
+                <input type="text" id="query" placeholder="Enter search term..." required>
+                <input type="submit" value="Search">
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Crafted with ❤️ By Vismit Rakhecha (Druk) | Reconnexus</p>
+    </div>
+
+    <script>
+        function search() {
+            const searchEngine = document.getElementById("searchEngine").value;
+            const query = encodeURIComponent(document.getElementById("query").value);
+            
+            // Clear input after search
+            document.getElementById("query").value = '';
+
+            const searchUrls = {
+                Wiki: [
+                    `https://deviwiki.com/w/index.php?title=Special:Search&search=${query}`,
+                    `https://usermanual.wiki/search.php?q=${query}`
+                ],
+                fccid: [`https://fccid.io/${query}`],
+                Openwrt: [`https://openwrt.org/start?do=search&q=${query}`],
+                datasheet: [
+                    `https://datasheetspdf.com/datasheet/search.php?sWord=${query}`,
+                    `https://www.alldatasheet.com/view.jsp?Searchword=${query}`
+                ],
+                CVE: [`https://www.opencve.io/cve?cvss=&search=${query}`],
+                mac: [`https://www.macvendorlookup.com/api/v2/${query}/xml`],
+                Code: [
+                    `https://code.google.com/archive/search?q=${query}`,
+                    `https://grep.app/search?q=${query}`
+                ],
+                exploit: [
+                    `https://packetstormsecurity.com/search/?q=${query}`,
+                    `https://vulners.com/search?query=${query}`
+                ],
+                github: [
+                    `https://github.com/search/?q=${query}%20exploit`,
+                    `https://github.com/search/?q=${query}%20cve`,
+                    `https://github.com/search/?q=${query}%20password`
+                ],
+                google: [
+                    `https://google.com/search?q=filetype: pdf, doc, etc device: ${query}`,
+                    `https://google.com/search?q=intext: datasheet ,configuration, manual, settingup, guide device: ${query}`
+                ],
+                defaultcreds: [
+                    `https://default-password.info/${query}`,
+                    `https://cirt.net/passwords?criteria=${query}`
+                ],
+                forums: [`https://boardreader.com/s/${query}.html;language=English`],
+                shodan: [`https://www.shodan.io/search?query=${query}`],
+                library: [`https://libraries.io/search?q=${query}`],
+                reports: [`https://www.diva-portal.org/smash/resultList.jsf?query=${query}&language=en`],
+                firmware: [`https://firmware.darmstadt.freifunk.net/?q=${query}`]
+            };
+
+            // Open URLs with delay to prevent popup blocking
+            if (searchUrls[searchEngine]) {
+                searchUrls[searchEngine].forEach((url, index) => {
+                    setTimeout(() => {
+                        window.open(url, '_blank');
+                    }, index * 100);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
