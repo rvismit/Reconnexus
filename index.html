@@ -1,266 +1,2357 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reconnexus - Hardware Recon Toolkit</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #6366f1;
-            --secondary: #525e75;
-            --accent: #ec4899;
-            --background: #92ba92;
-            --text: #11150d;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
+<title>Reconnexus - IoT Recon Toolkit</title>
 
-        body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--background) 0%, #78938a 100%);
-            color: var(--text);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
+<style>
+:root {
+    --bg: #07110d;
+    --panel: #0c1914;
+    --panel2: #101f19;
+    --border: #1d3a2d;
+    --text: #d7ffe7;
+    --muted: #82a995;
+    --green: #39ff88;
+    --yellow: #ffd166;
+    --red: #ff5c5c;
+    --blue: #61a8ff;
+}
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 1rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 100%;
-        }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Consolas, Monaco, "Courier New", monospace;
+}
 
-        .logo-container {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top, #10291d 0%, var(--bg) 45%),
+        var(--bg);
+    color: var(--text);
+}
 
-        .logo-container img {
-            width: 80%;
-            max-width: 320px;
-            height: auto;
-            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
-        }
+.container {
+    width: min(1100px, 94%);
+    margin: auto;
+    padding: 35px 0;
+}
 
-        .search-section {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+.logo-container {
+    text-align: center;
+    margin-bottom: 25px;
+}
 
-        .search-box {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
+.logo-container img {
+    width: min(320px, 75%);
+    height: auto;
+    filter: drop-shadow(0 0 18px rgba(57,255,136,.18));
+}
 
-        #searchEngine {
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text);
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1.2em;
-            transition: all 0.3s ease;
-        }
-        
-        #searchEngine option {
-            background: var(--background);
-            color: var(--text);
-        }
-        
-        #searchEngine:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
-            background: rgba(255, 255, 255, 0.15);
-        }
+.subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 8px;
+}
 
-        #query {
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text);
-            transition: all 0.3s ease;
-        }
+.search-section {
+    background: rgba(12,25,20,.94);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.35);
+}
 
-        #query:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
-            background: rgba(255, 255, 255, 0.15);
-        }
+.search-box {
+    display: grid;
+    grid-template-columns: 1fr 2fr auto;
+    gap: 12px;
+}
 
-        input[type="submit"] {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+select,
+input[type="text"] {
+    width: 100%;
+    background: #07120d;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 13px;
+    outline: none;
+}
 
-        input[type="submit"]:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(79, 70, 229, 0.25);
-            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
-        }
+select:focus,
+input[type="text"]:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 2px rgba(57,255,136,.08);
+}
 
-        .footer {
-            background: rgba(255, 255, 255, 0.05);
-            padding: .70rem;
-            text-align: center;
-            margin-top: auto;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
+select option {
+    background: #07120d;
+    color: var(--text);
+}
 
-        .footer p {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
-        }
+input[type="submit"] {
+    border: 0;
+    border-radius: 7px;
+    padding: 13px 24px;
+    background: var(--green);
+    color: #041009;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .search-section {
-                padding: 1.5rem;
-            }
+input[type="submit"]:hover {
+    background: #65ffa5;
+}
 
-            .logo-container img {
-                width: 70%;
-            }
-        }
-    </style>
+.status {
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 12px;
+    min-height: 18px;
+}
+
+#results {
+    margin-top: 22px;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 12px;
+}
+
+.results-header h2 {
+    color: var(--green);
+    font-size: 16px;
+}
+
+.clear-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.clear-btn:hover {
+    color: var(--green);
+    border-color: var(--green);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 12px;
+}
+
+.card {
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 15px;
+}
+
+.card h3 {
+    color: var(--green);
+    font-size: 14px;
+    margin-bottom: 9px;
+}
+
+.card p {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.open-source {
+    display: inline-block !important;
+    width: auto !important;
+    color: var(--green) !important;
+    text-decoration: none;
+    border: 1px solid var(--border) !important;
+    border-radius: 5px;
+    padding: 7px 10px !important;
+    margin-top: 9px;
+    font-size: 11px !important;
+    font-weight: bold;
+    letter-spacing: .5px;
+    border-bottom: 1px solid var(--border) !important;
+}
+
+.open-source:hover {
+    color: #65ffa5 !important;
+    border-color: var(--green) !important;
+    background: rgba(57,255,136,.05);
+}
+
+.badge {
+    display: inline-block;
+    padding: 3px 7px;
+    border-radius: 4px;
+    font-size: 10px;
+    margin: 3px 3px 3px 0;
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+.badge.green {
+    color: var(--green);
+    border-color: rgba(57,255,136,.35);
+}
+
+.badge.red {
+    color: var(--red);
+    border-color: rgba(255,92,92,.35);
+}
+
+.badge.yellow {
+    color: var(--yellow);
+    border-color: rgba(255,209,102,.35);
+}
+
+.badge.blue {
+    color: var(--blue);
+    border-color: rgba(97,168,255,.35);
+}
+
+.score {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 8px 0;
+}
+
+.score.low {
+    color: var(--green);
+}
+
+.score.medium {
+    color: var(--yellow);
+}
+
+.score.high {
+    color: var(--red);
+}
+
+.service {
+    display: inline-block;
+    background: #08160f;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 6px 8px;
+    margin: 3px;
+    font-size: 11px;
+}
+
+.cve {
+    border-left: 3px solid var(--red);
+    padding-left: 10px;
+    margin-bottom: 12px;
+}
+
+.cve strong {
+    color: var(--red);
+}
+
+.cve p {
+    margin-top: 5px;
+}
+
+.loading {
+    color: var(--green);
+    padding: 20px 0;
+    text-align: center;
+}
+
+.error {
+    color: var(--red);
+    padding: 15px;
+    border: 1px solid rgba(255,92,92,.3);
+    background: rgba(255,92,92,.04);
+    border-radius: 7px;
+}
+
+.footer {
+    text-align: center;
+    padding: 25px 0;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+@media (max-width: 760px) {
+
+    .search-box {
+        grid-template-columns: 1fr;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+    }
+
+    .container {
+        padding-top: 20px;
+    }
+}
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="logo-container">
-            <img src="logo.png" alt="logo">
+
+<div class="container">
+
+    <!-- =================================================
+         HEADER
+         ================================================= -->
+
+    <div class="logo-container">
+
+        <img src="logo.png" alt="Reconnexus">
+
+        <div class="subtitle">
+            Hardware & IoT Reconnaissance Toolkit
         </div>
-        <div class="search-section">
-            <div class="search-header"></div>
-            <form class="search-box" onsubmit="event.preventDefault(); search();">
-                <select id="searchEngine" aria-label="Select search engine">
-                    <option value="Wiki">Wiki</option>
-                    <option value="fccid">FCCID</option>
-                    <option value="Openwrt">Openwrt</option>
-                    <option value="datasheet">IC Analysis</option>
-                    <option value="CVE">CVE's</option>
-                    <option value="mac">MAC Address</option>
-                    <option value="Code">Code</option>
-                    <option value="exploit">Available Exploits</option>
-                    <option value="github">Git Dork</option>
-                    <option value="google">Google Dorks</option>
-                    <option value="defaultcreds">Default Creds</option>
-                    <option value="forums">Online Forums</option>
-                    <option value="shodan">Shodan</option>
-                    <option value="library">Third-party Components</option>
-                    <option value="reports">Previous Reports</option>
-                    <option value="firmware">Download Firmware</option>
-                </select>
-                
-                <input type="text" id="query" placeholder="Enter search term..." required>
-                <input type="submit" value="Search">
-            </form>
-        </div>
+
     </div>
 
-    <div class="footer">
-        <p>Crafted with ❤️ By Vismit Rakhecha (Druk) | Reconnexus</p>
+
+    <!-- =================================================
+         SEARCH
+         ================================================= -->
+
+    <div class="search-section">
+
+        <form class="search-box"
+              onsubmit="event.preventDefault(); search();">
+
+            <select id="searchEngine" aria-label="Recon mode">
+
+                <option value="iot">
+                    IoT Recon
+                </option>
+
+                <option value="Wiki">
+                    Wiki
+                </option>
+
+                <option value="fccid">
+                    FCC ID
+                </option>
+
+                <option value="Openwrt">
+                    OpenWrt
+                </option>
+
+                <option value="datasheet">
+                    IC Analysis / Datasheet
+                </option>
+
+                <option value="CVE">
+                    CVE
+                </option>
+
+                <option value="mac">
+                    MAC Address
+                </option>
+
+                <option value="Code">
+                    Code
+                </option>
+
+                <option value="exploit">
+                    Exploit / PoC Search
+                </option>
+
+                <option value="github">
+                    Git Dork
+                </option>
+
+                <option value="google">
+                    Google Dork
+                </option>
+
+                <option value="defaultcreds">
+                    Default Credentials
+                </option>
+
+                <option value="forums">
+                    Online Forums
+                </option>
+
+                <option value="shodan">
+                    Shodan
+                </option>
+
+                <option value="library">
+                    Third-Party Components
+                </option>
+
+                <option value="reports">
+                    Previous Reports
+                </option>
+
+                <option value="firmware">
+                    Download Firmware
+                </option>
+
+                <option value="eol">
+                    EOL Intelligence
+                </option>
+
+                <option value="sbom">
+                    Components / SBOM
+                </option>
+
+            </select>
+
+
+            <input
+                type="text"
+                id="query"
+                placeholder="Enter IP, domain, MAC, vendor, model, firmware, CVE..."
+                autocomplete="off"
+                required
+            >
+
+
+            <input
+                type="submit"
+                value="Search"
+            >
+
+        </form>
+
+
+        <div id="status" class="status"></div>
+
     </div>
 
-    <script>
-        function search() {
-            const searchEngine = document.getElementById("searchEngine").value;
-            const query = encodeURIComponent(document.getElementById("query").value);
-            
-            // Clear input after search
-            document.getElementById("query").value = '';
 
-            const searchUrls = {
-                Wiki: [
-                    `https://deviwiki.com/w/index.php?title=Special:Search&search=${query}`,
-                    `https://usermanual.wiki/search.php?q=${query}`
-                ],
-                fccid: [`https://fccid.io/${query}`],
-                Openwrt: [`https://openwrt.org/start?do=search&q=${query}`],
-                datasheet: [
-                    `https://datasheetspdf.com/datasheet/search.php?sWord=${query}`,
-                    `https://www.alldatasheet.com/view.jsp?Searchword=${query}`
-                ],
-                CVE: [`https://www.opencve.io/cve?cvss=&search=${query}`],
-                mac: [`https://www.macvendorlookup.com/api/v2/${query}/xml`],
-                Code: [
-                    `https://code.google.com/archive/search?q=${query}`,
-                    `https://grep.app/search?q=${query}`
-                ],
-                exploit: [
-                    `https://packetstormsecurity.com/search/?q=${query}`,
-                    `https://vulners.com/search?query=${query}`
-                ],
-                github: [
-                    `https://github.com/search/?q=${query}%20exploit`,
-                    `https://github.com/search/?q=${query}%20cve`,
-                    `https://github.com/search/?q=${query}%20password`
-                ],
-                google: [
-                    `https://google.com/search?q=filetype: pdf, doc, etc device: ${query}`,
-                    `https://google.com/search?q=intext: datasheet ,configuration, manual, settingup, guide device: ${query}`
-                ],
-                defaultcreds: [
-                    `https://default-password.info/${query}`,
-                    `https://cirt.net/passwords?criteria=${query}`
-                ],
-                forums: [`https://boardreader.com/s/${query}.html;language=English`],
-                shodan: [`https://www.shodan.io/search?query=${query}`],
-                library: [`https://repology.org/projects/?search=${query}`],
-                reports: [`https://www.diva-portal.org/smash/resultList.jsf?query=${query}&language=en`],
-                firmware: [`https://firmware.darmstadt.freifunk.net/?q=${query}`]
-            };
+    <!-- =================================================
+         RESULTS
+         ================================================= -->
 
-            // Open URLs with delay to prevent popup blocking
-            if (searchUrls[searchEngine]) {
-                searchUrls[searchEngine].forEach((url, index) => {
-                    setTimeout(() => {
-                        window.open(url, '_blank');
-                    }, index * 100);
-                });
+    <div id="results"></div>
+
+</div>
+
+
+<div class="footer">
+    Crafted with ❤️ By Vismit Rakhecha (Druk) | Reconnexus
+</div>
+
+
+<script>
+
+/* =========================================================
+   PUBLIC DATA SOURCES
+   ========================================================= */
+
+const INTERNETDB =
+    "https://internetdb.shodan.io/";
+
+const NVD_API =
+    "https://services.nvd.nist.gov/rest/json/cves/2.0";
+
+const KEV_API =
+    "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json";
+
+const EPSS_API =
+    "https://api.first.org/data/v1/epss";
+
+const CRTSH =
+    "https://crt.sh/?q=%25.";
+
+
+/* =========================================================
+   DIRECT RECON SOURCES
+   ========================================================= */
+
+const searchUrls = {
+
+    Wiki: [
+        q =>
+            `https://deviwiki.com/w/index.php?title=Special:Search&search=${q}`,
+
+        q =>
+            `https://usermanual.wiki/search.php?q=${q}`
+    ],
+
+
+    fccid: [
+        q =>
+            `https://fccid.io/${q}`
+    ],
+
+
+    Openwrt: [
+        q =>
+            `https://openwrt.org/start?do=search&q=${q}`
+    ],
+
+
+    datasheet: [
+        q =>
+            `https://datasheetspdf.com/datasheet/search.php?sWord=${q}`,
+
+        q =>
+            `https://www.alldatasheet.com/view.jsp?Searchword=${q}`
+    ],
+
+
+    CVE: [
+        q =>
+            `https://nvd.nist.gov/vuln/search/results?query=${q}`,
+
+        q =>
+            `https://www.opencve.io/cve?search=${q}`,
+
+        q =>
+            `https://www.cisa.gov/known-exploited-vulnerabilities-catalog?search_api_fulltext=${q}`,
+
+        q =>
+            `https://api.first.org/data/v1/epss?cve=${q}`
+    ],
+
+
+    mac: [
+        q =>
+            `https://www.macvendorlookup.com/api/v2/${q}/xml`
+    ],
+
+
+    Code: [
+        q =>
+            `https://github.com/search?q=${q}&type=code`,
+
+        q =>
+            `https://grep.app/search?q=${q}`
+    ],
+
+
+    exploit: [
+        q =>
+            `https://www.exploit-db.com/search?q=${q}`,
+
+        q =>
+            `https://vulners.com/search?query=${q}`,
+
+        q =>
+            `https://github.com/search?q=${q}%20exploit&type=code`
+    ],
+
+
+    github: [
+        q =>
+            `https://github.com/search?q=${q}%20exploit&type=code`,
+
+        q =>
+            `https://github.com/search?q=${q}%20cve&type=code`,
+
+        q =>
+            `https://github.com/search?q=${q}%20password&type=code`
+    ],
+
+
+    google: [
+        q =>
+            `https://www.google.com/search?q=filetype%3Apdf+OR+filetype%3Adoc+${q}`,
+
+        q =>
+            `https://www.google.com/search?q=intext%3Adatasheet+OR+intext%3Amanual+OR+intext%3Aconfiguration+${q}`
+    ],
+
+
+    defaultcreds: [
+        q =>
+            `https://default-password.info/${q}`,
+
+        q =>
+            `https://cirt.net/passwords?criteria=${q}`
+    ],
+
+
+    forums: [
+        q =>
+            `https://boardreader.com/s/${q}.html`
+    ],
+
+
+    shodan: [
+        q =>
+            `https://www.shodan.io/search?query=${q}`
+    ],
+
+
+    library: [
+        q =>
+            `https://repology.org/projects/?search=${q}`,
+
+        q =>
+            `https://github.com/search?q=${q}&type=code`
+    ],
+
+
+    reports: [
+        q =>
+            `https://www.diva-portal.org/smash/resultList.jsf?query=${q}&language=en`
+    ],
+
+
+    firmware: [
+        q =>
+            `https://firmware.darmstadt.freifunk.net/?q=${q}`,
+
+        q =>
+            `https://github.com/search?q=${q}%20firmware&type=code`
+    ],
+
+
+    eol: [
+        q =>
+            `https://endoflife.date/search?q=${q}`,
+
+        q =>
+            `https://github.com/search?q=${q}%20EOL&type=code`
+    ],
+
+
+    sbom: [
+        q =>
+            `https://nvd.nist.gov/products/cpe/search/results?keyword=${q}`,
+
+        q =>
+            `https://github.com/search?q=${q}%20SBOM&type=code`,
+
+        q =>
+            `https://grep.app/search?q=${q}%20SBOM`,
+
+        q =>
+            `https://repology.org/projects/?search=${q}`
+    ]
+
+};
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function setStatus(message) {
+
+    document.getElementById("status").textContent =
+        message || "";
+}
+
+
+function clearResults() {
+
+    document.getElementById("results").innerHTML =
+        "";
+}
+
+
+function esc(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function isIPv4(value) {
+
+    const parts =
+        value.trim().split(".");
+
+    return (
+        parts.length === 4 &&
+        parts.every(x => {
+
+            const n =
+                Number(x);
+
+            return (
+                Number.isInteger(n) &&
+                n >= 0 &&
+                n <= 255
+            );
+
+        })
+    );
+}
+
+
+function isDomain(value) {
+
+    return /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+        .test(value.trim());
+}
+
+
+/* =========================================================
+   SOURCE BUTTON
+   ========================================================= */
+
+function sourceButton(url) {
+
+    return `
+        <a
+            href="${url}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="open-source"
+        >
+            OPEN SOURCE →
+        </a>
+    `;
+}
+
+
+/* =========================================================
+   GENERIC CARD
+   ========================================================= */
+
+function card(title, body) {
+
+    return `
+        <div class="card">
+
+            <h3>
+                ${esc(title)}
+            </h3>
+
+            ${body}
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   LINK CARD
+   ========================================================= */
+
+function linkCard(
+    title,
+    description,
+    urls
+) {
+
+    return card(
+        title,
+
+        `
+        <p>
+            ${esc(description)}
+        </p>
+
+        <div>
+
+            ${
+                urls.map(url =>
+                    sourceButton(url)
+                ).join("")
             }
+
+        </div>
+        `
+    );
+}
+
+
+/* =========================================================
+   MAIN SEARCH
+   ========================================================= */
+
+async function search() {
+
+    const mode =
+        document.getElementById(
+            "searchEngine"
+        ).value;
+
+    const raw =
+        document.getElementById(
+            "query"
+        ).value.trim();
+
+    if (!raw)
+        return;
+
+    clearResults();
+
+    if (mode === "iot") {
+
+        await runIoTRecon(raw);
+
+        return;
+    }
+
+    runSpecificRecon(
+        mode,
+        raw
+    );
+}
+
+
+/* =========================================================
+   DIRECT RECON SEARCH
+   ========================================================= */
+
+function runSpecificRecon(
+    mode,
+    raw
+) {
+
+    const encoded =
+        encodeURIComponent(raw);
+
+    const urls =
+        searchUrls[mode];
+
+    if (!urls) {
+
+        setStatus(
+            "No recon source configured."
+        );
+
+        return;
+    }
+
+
+    const title =
+        document.getElementById(
+            "searchEngine"
+        )
+        .selectedOptions[0]
+        .textContent;
+
+
+    const results =
+        document.getElementById(
+            "results"
+        );
+
+
+    results.innerHTML = `
+
+        <div class="results-header">
+
+            <h2>
+                ${esc(title)}
+            </h2>
+
+            <button
+                class="clear-btn"
+                onclick="clearResults()"
+            >
+                CLEAR
+            </button>
+
+        </div>
+
+
+        <div class="grid">
+
+            ${
+                urls.map((fn, index) => {
+
+                    const url =
+                        fn(encoded);
+
+                    return `
+
+                        <div class="card">
+
+                            <h3>
+                                Source ${index + 1}
+                            </h3>
+
+                            ${sourceButton(url)}
+
+                        </div>
+
+                    `;
+
+                }).join("")
+            }
+
+        </div>
+
+    `;
+
+
+    setStatus(
+        `${urls.length} source${
+            urls.length > 1
+            ? "s"
+            : ""
+        } available`
+    );
+}
+
+
+/* =========================================================
+   IoT RECON
+   ========================================================= */
+
+async function runIoTRecon(
+    target
+) {
+
+    setStatus(
+        "Running passive IoT reconnaissance..."
+    );
+
+
+    const results =
+        document.getElementById(
+            "results"
+        );
+
+
+    results.innerHTML = `
+
+        <div class="loading">
+
+            [*] Collecting public intelligence...
+
+        </div>
+
+    `;
+
+
+    const data = {
+
+        target,
+
+        internetdb: null,
+
+        nvd: null,
+
+        kev: null,
+
+        certs: null,
+
+        errors: []
+
+    };
+
+
+    /* =====================================================
+       INTERNETDB
+       ===================================================== */
+
+    if (isIPv4(target)) {
+
+        try {
+
+            const response =
+                await fetch(
+                    INTERNETDB +
+                    encodeURIComponent(target)
+                );
+
+
+            if (response.ok) {
+
+                data.internetdb =
+                    await response.json();
+
+            } else {
+
+                data.errors.push(
+                    "InternetDB returned an error."
+                );
+
+            }
+
+        } catch (e) {
+
+            data.errors.push(
+                "InternetDB unavailable from browser."
+            );
+
         }
-    </script>
+
+    }
+
+
+    /* =====================================================
+       NVD
+       ===================================================== */
+
+    try {
+
+        const url =
+            NVD_API +
+            "?keywordSearch=" +
+            encodeURIComponent(target) +
+            "&resultsPerPage=20";
+
+
+        const response =
+            await fetch(url);
+
+
+        if (response.ok) {
+
+            data.nvd =
+                await response.json();
+
+        }
+
+    } catch (e) {
+
+        data.errors.push(
+            "NVD request failed."
+        );
+
+    }
+
+
+    /* =====================================================
+       CISA KEV
+       ===================================================== */
+
+    try {
+
+        const response =
+            await fetch(
+                KEV_API
+            );
+
+
+        if (response.ok) {
+
+            data.kev =
+                await response.json();
+
+        }
+
+    } catch (e) {
+
+        data.errors.push(
+            "CISA KEV request failed."
+        );
+
+    }
+
+
+    /* =====================================================
+       CERTIFICATE TRANSPARENCY
+       ===================================================== */
+
+    if (isDomain(target)) {
+
+        try {
+
+            const url =
+                CRTSH +
+                encodeURIComponent(target) +
+                "&output=json";
+
+
+            const response =
+                await fetch(url);
+
+
+            if (response.ok) {
+
+                data.certs =
+                    await response.json();
+
+            }
+
+        } catch (e) {
+
+            data.errors.push(
+                "crt.sh request failed."
+            );
+
+        }
+
+    }
+
+
+    renderIoTRecon(data);
+
+    setStatus(
+        "Recon complete."
+    );
+}
+
+
+/* =========================================================
+   SERVICE DETECTION
+   ========================================================= */
+
+function detectServices(
+    ports = []
+) {
+
+    const serviceMap = {
+
+        21: "FTP",
+
+        22: "SSH",
+
+        23: "TELNET",
+
+        25: "SMTP",
+
+        53: "DNS",
+
+        80: "HTTP",
+
+        110: "POP3",
+
+        143: "IMAP",
+
+        443: "HTTPS",
+
+        502: "MODBUS/TCP",
+
+        554: "RTSP",
+
+        1883: "MQTT",
+
+        1900: "UPnP / SSDP",
+
+        5683: "CoAP",
+
+        5684: "CoAP TLS",
+
+        5000: "HTTP / UPnP",
+
+        8080: "HTTP-ALT",
+
+        8443: "HTTPS-ALT",
+
+        8554: "RTSP",
+
+        8883: "MQTT TLS"
+
+    };
+
+
+    return ports.map(port => ({
+
+        port,
+
+        service:
+            serviceMap[port] ||
+            "UNKNOWN"
+
+    }));
+
+}
+
+
+/* =========================================================
+   RISK SCORE
+   ========================================================= */
+
+function calculateRisk(
+    db,
+    nvd,
+    kev
+) {
+
+    let score = 0;
+
+
+    const ports =
+        db?.ports || [];
+
+
+    const vulns =
+        db?.vulns || [];
+
+
+    const cves =
+        nvd?.vulnerabilities || [];
+
+
+    score += Math.min(
+        25,
+        ports.length * 2
+    );
+
+
+    score += Math.min(
+        40,
+        vulns.length * 8
+    );
+
+
+    const services =
+        detectServices(
+            ports
+        );
+
+
+    const names =
+        services.map(
+            x => x.service
+        );
+
+
+    if (
+        names.includes("TELNET")
+    )
+        score += 15;
+
+
+    if (
+        names.includes("MQTT")
+    )
+        score += 8;
+
+
+    if (
+        names.includes("RTSP")
+    )
+        score += 8;
+
+
+    if (
+        names.includes("CoAP")
+    )
+        score += 6;
+
+
+    if (
+        names.includes(
+            "UPnP / SSDP"
+        )
+    )
+        score += 5;
+
+
+    if (
+        names.includes("FTP")
+    )
+        score += 5;
+
+
+    if (
+        names.includes(
+            "MODBUS/TCP"
+        )
+    )
+        score += 10;
+
+
+    if (
+        cves.length > 0
+    )
+        score += 5;
+
+
+    if (
+        kev &&
+        cves.length
+    ) {
+
+        const kevIds =
+            new Set(
+                (kev.vulnerabilities || [])
+                    .map(
+                        x => x.cveID
+                    )
+            );
+
+
+        const kevMatch =
+            cves.some(item => {
+
+                const id =
+                    item.cve?.id;
+
+                return kevIds.has(id);
+
+            });
+
+
+        if (kevMatch)
+            score += 10;
+
+    }
+
+
+    return Math.min(
+        100,
+        score
+    );
+}
+
+
+/* =========================================================
+   IoT RECON RENDER
+   ========================================================= */
+
+function renderIoTRecon(
+    data
+) {
+
+    const db =
+        data.internetdb;
+
+
+    const nvd =
+        data.nvd;
+
+
+    const risk =
+        calculateRisk(
+            db,
+            nvd,
+            data.kev
+        );
+
+
+    let riskClass =
+        "low";
+
+
+    if (risk >= 60)
+        riskClass = "high";
+
+    else if (risk >= 30)
+        riskClass = "medium";
+
+
+    let html = `
+
+        <div class="results-header">
+
+            <h2>
+                IoT Recon —
+                ${esc(data.target)}
+            </h2>
+
+            <button
+                class="clear-btn"
+                onclick="clearResults()"
+            >
+                CLEAR
+            </button>
+
+        </div>
+
+
+        <div class="grid">
+
+            ${card(
+                "Risk Assessment",
+
+                `
+                <div class="score ${riskClass}">
+                    ${risk}/100
+                </div>
+
+                <p>
+                    Passive exposure assessment based
+                    on publicly observable services,
+                    vulnerabilities and intelligence.
+                </p>
+                `
+            )}
+
+
+            ${card(
+                "Target",
+
+                `
+                <p>
+                    <strong>
+                        ${esc(data.target)}
+                    </strong>
+                </p>
+
+                <div style="margin-top:8px">
+
+                    ${
+                        isIPv4(data.target)
+
+                        ? `
+                            <span class="badge blue">
+                                IPv4
+                            </span>
+                        `
+
+                        : isDomain(data.target)
+
+                        ? `
+                            <span class="badge blue">
+                                DOMAIN
+                            </span>
+                        `
+
+                        : `
+                            <span class="badge yellow">
+                                IDENTIFIER
+                            </span>
+                        `
+                    }
+
+                </div>
+                `
+            )}
+
+        </div>
+
+    `;
+
+
+    /* =====================================================
+       INTERNETDB
+       ===================================================== */
+
+    if (db) {
+
+        const services =
+            detectServices(
+                db.ports || []
+            );
+
+
+        html += `
+
+            <div
+                class="grid"
+                style="margin-top:12px"
+            >
+
+                ${card(
+                    "Exposed Ports",
+
+                    `
+                    <p>
+                        ${
+                            db.ports?.length || 0
+                        }
+                        ports observed
+                    </p>
+
+                    <div style="margin-top:8px">
+
+                        ${
+                            (db.ports || [])
+                            .map(port => `
+
+                                <span class="badge">
+                                    ${esc(port)}
+                                </span>
+
+                            `)
+                            .join("")
+                        }
+
+                    </div>
+                    `
+                )}
+
+
+                ${card(
+                    "Detected Services",
+
+                    `
+                    <div>
+
+                        ${
+                            services.map(x => `
+
+                                <span class="service">
+
+                                    ${esc(x.port)}
+                                    /
+                                    ${esc(x.service)}
+
+                                </span>
+
+                            `)
+                            .join("")
+                        }
+
+                    </div>
+                    `
+                )}
+
+            </div>
+
+        `;
+
+
+        /* =================================================
+           HOSTNAMES / DOMAINS
+           ================================================= */
+
+        if (
+            (db.hostnames || []).length ||
+            (db.domains || []).length
+        ) {
+
+            html += card(
+                "Hostnames / Domains",
+
+                `
+                ${
+                    [
+                        ...(db.hostnames || []),
+                        ...(db.domains || [])
+                    ]
+                    .filter(Boolean)
+                    .filter(
+                        (v, i, a) =>
+                            a.indexOf(v) === i
+                    )
+                    .map(x => `
+
+                        <span class="badge blue">
+                            ${esc(x)}
+                        </span>
+
+                    `)
+                    .join("")
+                }
+                `
+            );
+
+        }
+
+
+        /* =================================================
+           CPE
+           ================================================= */
+
+        if (
+            (db.cpes || []).length
+        ) {
+
+            html += card(
+                "CPE / Product Intelligence",
+
+                `
+                <p>
+                    InternetDB identified
+                    ${db.cpes.length}
+                    CPE entr${
+                        db.cpes.length === 1
+                        ? "y"
+                        : "ies"
+                    }.
+                </p>
+
+
+                <div style="margin-top:8px">
+
+                    ${
+                        db.cpes
+                        .map(cpe => `
+
+                            <span class="badge">
+                                ${esc(cpe)}
+                            </span>
+
+                        `)
+                        .join("")
+                    }
+
+                </div>
+
+
+                <p style="margin-top:10px">
+
+                    CPEs can be correlated with
+                    vulnerability and lifecycle
+                    intelligence.
+
+                </p>
+                `
+            );
+
+        }
+
+
+        /* =================================================
+           INTERNETDB VULNS
+           ================================================= */
+
+        if (
+            (db.vulns || []).length
+        ) {
+
+            html += card(
+                "Known Vulnerabilities",
+
+                `
+                ${
+                    db.vulns
+                    .map(v => `
+
+                        <span class="badge red">
+                            ${esc(v)}
+                        </span>
+
+                    `)
+                    .join("")
+                }
+                `
+            );
+
+        }
+
+
+        /* =================================================
+           TAGS
+           ================================================= */
+
+        if (
+            (db.tags || []).length
+        ) {
+
+            html += card(
+                "Exposure Tags",
+
+                `
+                ${
+                    db.tags
+                    .map(tag => `
+
+                        <span class="badge yellow">
+                            ${esc(tag)}
+                        </span>
+
+                    `)
+                    .join("")
+                }
+                `
+            );
+
+        }
+
+    } else {
+
+        html += card(
+            "InternetDB",
+
+            `
+            <p>
+                No InternetDB result was available.
+                For InternetDB reconnaissance,
+                enter a public IPv4 address.
+            </p>
+            `
+        );
+
+    }
+
+
+    /* =====================================================
+       NVD
+       ===================================================== */
+
+    html += `
+
+        <div
+            class="card"
+            style="margin-top:12px"
+        >
+
+            <h3>
+                NVD Vulnerability Intelligence
+            </h3>
+
+    `;
+
+
+    const vulnerabilities =
+        nvd?.vulnerabilities || [];
+
+
+    if (
+        !vulnerabilities.length
+    ) {
+
+        html += `
+
+            <p>
+                No matching NVD vulnerabilities
+                returned.
+            </p>
+
+        `;
+
+    } else {
+
+        vulnerabilities
+            .slice(0, 20)
+            .forEach(item => {
+
+                const cve =
+                    item.cve;
+
+
+                const id =
+                    cve?.id ||
+                    "Unknown CVE";
+
+
+                const description =
+                    cve?.descriptions
+                    ?.find(
+                        x =>
+                            x.lang === "en"
+                    )
+                    ?.value ||
+                    "No description available.";
+
+
+                const metrics =
+                    cve?.metrics;
+
+
+                let cvss =
+                    "";
+
+
+                let severity =
+                    "";
+
+
+                const metric =
+                    metrics?.cvssMetricV31?.[0] ||
+                    metrics?.cvssMetricV30?.[0];
+
+
+                if (metric) {
+
+                    cvss =
+                        metric.cvssData
+                        ?.baseScore ??
+                        "";
+
+
+                    severity =
+                        metric.cvssData
+                        ?.baseSeverity ??
+                        "";
+
+                }
+
+
+                html += `
+
+                    <div class="cve">
+
+                        <strong>
+                            ${esc(id)}
+                        </strong>
+
+
+                        ${
+                            severity
+                            ? `
+
+                                <span
+                                    class="badge red"
+                                >
+                                    ${esc(severity)}
+                                    ${esc(cvss)}
+                                </span>
+
+                            `
+                            : ""
+                        }
+
+
+                        <p>
+
+                            ${esc(
+                                description.substring(
+                                    0,
+                                    500
+                                )
+                            )}
+
+                        </p>
+
+                    </div>
+
+                `;
+
+            });
+
+    }
+
+
+    html += `
+        </div>
+    `;
+
+
+    /* =====================================================
+       CISA KEV
+       ===================================================== */
+
+    html += card(
+        "CISA Known Exploited Vulnerabilities",
+
+        renderKEV(
+            vulnerabilities,
+            data.kev
+        )
+    );
+
+
+    /* =====================================================
+       EPSS
+       ===================================================== */
+
+    html += card(
+        "EPSS Intelligence",
+
+        `
+        <p>
+            EPSS provides exploitation probability
+            intelligence for known CVEs.
+        </p>
+
+
+        <div style="margin-top:10px">
+
+            ${
+                vulnerabilities
+                .slice(0, 10)
+                .map(item => {
+
+                    const id =
+                        item.cve?.id;
+
+
+                    if (!id)
+                        return "";
+
+
+                    const url =
+                        `${EPSS_API}?cve=${encodeURIComponent(id)}`;
+
+
+                    return sourceButton(url);
+
+                })
+                .join("")
+            }
+
+        </div>
+        `
+    );
+
+
+    /* =====================================================
+       CERTIFICATE TRANSPARENCY
+       ===================================================== */
+
+    if (data.certs) {
+
+        const names =
+            [
+                ...new Set(
+                    data.certs.flatMap(
+                        cert =>
+                            (cert.name_value || "")
+                            .split("\n")
+                    )
+                )
+            ]
+            .filter(Boolean);
+
+
+        html += card(
+            "Certificate Transparency",
+
+            `
+            <p>
+                ${
+                    data.certs.length
+                }
+                certificate records returned.
+            </p>
+
+
+            <div style="margin-top:10px">
+
+                ${
+                    names
+                    .slice(0, 50)
+                    .map(name => `
+
+                        <span class="badge blue">
+                            ${esc(name)}
+                        </span>
+
+                    `)
+                    .join("")
+                }
+
+            </div>
+
+
+            ${sourceButton(
+                CRTSH +
+                encodeURIComponent(
+                    data.target
+                )
+            )}
+
+            `
+        );
+
+    }
+
+
+    /* =====================================================
+       DNS / RDAP / NETWORK
+       ===================================================== */
+
+    html += `
+
+        <div
+            class="grid"
+            style="margin-top:12px"
+        >
+
+            ${linkCard(
+                "DNS Intelligence",
+
+                "DNS records and hostname intelligence.",
+
+                [
+
+                    `https://dns.google/resolve?name=${encodeURIComponent(data.target)}&type=A`,
+
+                    `https://dns.google/resolve?name=${encodeURIComponent(data.target)}&type=AAAA`,
+
+                    `https://dns.google/resolve?name=${encodeURIComponent(data.target)}&type=MX`,
+
+                    `https://dns.google/resolve?name=${encodeURIComponent(data.target)}&type=TXT`
+
+                ]
+            )}
+
+
+            ${linkCard(
+                "RDAP / Registration",
+
+                "Registration and network ownership intelligence.",
+
+                [
+
+                    isIPv4(data.target)
+
+                    ? `https://rdap.org/ip/${encodeURIComponent(data.target)}`
+
+                    : `https://rdap.org/domain/${encodeURIComponent(data.target)}`
+
+                ]
+            )}
+
+
+            ${linkCard(
+                "Network / ASN",
+
+                "ASN, IP ownership and routing intelligence.",
+
+                [
+
+                    `https://bgp.he.net/search?search[search]=${encodeURIComponent(data.target)}`,
+
+                    `https://ipinfo.io/${encodeURIComponent(data.target)}`
+
+                ]
+            )}
+
+        </div>
+
+    `;
+
+
+    /* =====================================================
+       EOL
+       ===================================================== */
+
+    html += card(
+        "EOL Intelligence",
+
+        `
+        <p>
+            Lifecycle status should be determined
+            from an identifiable vendor, product
+            and version. Reconnexus does not guess
+            EOL status from an IP.
+        </p>
+
+
+        <div style="margin-top:10px">
+
+            ${sourceButton(
+                `https://endoflife.date/search?q=${encodeURIComponent(data.target)}`
+            )}
+
+
+            ${sourceButton(
+                `https://github.com/search?q=${encodeURIComponent(data.target)}%20EOL&type=code`
+            )}
+
+        </div>
+        `
+    );
+
+
+    /* =====================================================
+       COMPONENTS / SBOM
+       ===================================================== */
+
+    html += card(
+        "Components / SBOM",
+
+        `
+        <p>
+            Component intelligence path:
+        </p>
+
+
+        <div style="margin-top:8px">
+
+            <span class="badge green">
+                Product
+            </span>
+
+            →
+
+            <span class="badge blue">
+                Component
+            </span>
+
+            →
+
+            <span class="badge blue">
+                CPE
+            </span>
+
+            →
+
+            <span class="badge yellow">
+                CVE
+            </span>
+
+            →
+
+            <span class="badge red">
+                KEV / EPSS
+            </span>
+
+        </div>
+
+
+        <div style="margin-top:10px">
+
+            ${sourceButton(
+                `https://nvd.nist.gov/products/cpe/search/results?keyword=${encodeURIComponent(data.target)}`
+            )}
+
+
+            ${sourceButton(
+                `https://github.com/search?q=${encodeURIComponent(data.target)}%20SBOM&type=code`
+            )}
+
+
+            ${sourceButton(
+                `https://grep.app/search?q=${encodeURIComponent(data.target)}%20SBOM`
+            )}
+
+
+            ${sourceButton(
+                `https://repology.org/projects/?search=${encodeURIComponent(data.target)}`
+            )}
+
+        </div>
+        `
+    );
+
+
+    /* =====================================================
+       FIRMWARE / EXPLOIT / HARDWARE / DOCUMENTATION
+       ===================================================== */
+
+    html += `
+
+        <div
+            class="grid"
+            style="margin-top:12px"
+        >
+
+            ${linkCard(
+                "Firmware Intelligence",
+
+                "Firmware discovery and public research.",
+
+                [
+
+                    `https://firmware.darmstadt.freifunk.net/?q=${encodeURIComponent(data.target)}`,
+
+                    `https://github.com/search?q=${encodeURIComponent(data.target)}%20firmware&type=code`
+
+                ]
+            )}
+
+
+            ${linkCard(
+                "Exploit / PoC Intelligence",
+
+                "Public exploit and proof-of-concept research.",
+
+                [
+
+                    `https://www.exploit-db.com/search?q=${encodeURIComponent(data.target)}`,
+
+                    `https://vulners.com/search?query=${encodeURIComponent(data.target)}`,
+
+                    `https://github.com/search?q=${encodeURIComponent(data.target)}%20exploit&type=code`
+
+                ]
+            )}
+
+
+            ${linkCard(
+                "Hardware / FCC",
+
+                "Hardware identification and certification research.",
+
+                [
+
+                    `https://fccid.io/${encodeURIComponent(data.target)}`
+
+                ]
+            )}
+
+
+            ${linkCard(
+                "Technical Documentation",
+
+                "Manuals, datasheets and technical documentation.",
+
+                [
+
+                    `https://deviwiki.com/w/index.php?title=Special:Search&search=${encodeURIComponent(data.target)}`,
+
+                    `https://usermanual.wiki/search.php?q=${encodeURIComponent(data.target)}`,
+
+                    `https://datasheetspdf.com/datasheet/search.php?sWord=${encodeURIComponent(data.target)}`
+
+                ]
+            )}
+
+        </div>
+
+    `;
+
+
+    /* =====================================================
+       ERRORS / NOTES
+       ===================================================== */
+
+    if (
+        data.errors.length
+    ) {
+
+        html += `
+
+            <div
+                class="card"
+                style="margin-top:12px"
+            >
+
+                <h3>
+                    Collection Notes
+                </h3>
+
+
+                <p>
+
+                    Some public APIs may restrict
+                    browser-side requests through
+                    CORS or rate limits. Direct
+                    investigation sources remain
+                    available.
+
+                </p>
+
+
+                <div style="margin-top:8px">
+
+                    ${
+                        data.errors
+                        .map(error => `
+
+                            <span class="badge yellow">
+                                ${esc(error)}
+                            </span>
+
+                        `)
+                        .join("")
+                    }
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    document.getElementById(
+        "results"
+    ).innerHTML = html;
+}
+
+
+/* =========================================================
+   CISA KEV
+   ========================================================= */
+
+function renderKEV(
+    vulnerabilities,
+    kev
+) {
+
+    if (!kev) {
+
+        return `
+
+            <p>
+                CISA KEV feed could not be retrieved.
+            </p>
+
+        `;
+
+    }
+
+
+    const kevIds =
+        new Map(
+            (kev.vulnerabilities || [])
+            .map(item => [
+                item.cveID,
+                item
+            ])
+        );
+
+
+    const matches = [];
+
+
+    vulnerabilities.forEach(
+        item => {
+
+            const id =
+                item.cve?.id;
+
+
+            if (
+                id &&
+                kevIds.has(id)
+            ) {
+
+                matches.push(
+                    kevIds.get(id)
+                );
+
+            }
+
+        }
+    );
+
+
+    if (
+        !matches.length
+    ) {
+
+        return `
+
+            <p>
+                No matching NVD CVE was found
+                in the CISA KEV catalog.
+            </p>
+
+        `;
+
+    }
+
+
+    return matches
+        .map(item => `
+
+            <div class="cve">
+
+                <strong>
+                    ${esc(item.cveID)}
+                </strong>
+
+
+                <span class="badge red">
+                    CISA KEV
+                </span>
+
+
+                <p>
+                    ${esc(
+                        item.vulnerabilityName ||
+                        "Known exploited vulnerability"
+                    )}
+                </p>
+
+
+                ${
+                    item.requiredAction
+
+                    ? `
+
+                        <p>
+                            ${esc(
+                                item.requiredAction
+                            )}
+                        </p>
+
+                    `
+
+                    : ""
+                }
+
+            </div>
+
+        `)
+        .join("");
+}
+
+</script>
+
 </body>
 </html>
